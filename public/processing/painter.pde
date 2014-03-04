@@ -49,7 +49,7 @@ public void createLayer(int aboveWhich){
   PGraphics layer = createGraphics(WIDTH, HEIGHT, RENDER);
   layer.beginDraw();
   layer.smooth(8);
-  layer.background(255, 0); // create transparent layer
+  layer.background(0, 0); // create transparent layer
   layer.endDraw();
   layers.add(aboveWhich+1, layer);
   currentLayerIdx = aboveWhich+1;
@@ -60,6 +60,7 @@ public void createLayer(int aboveWhich){
 public void deleteLayer(int idx){
 
   console.log("delete: " + idx);
+  
   layers.remove(idx);
   currentLayerIdx--;
   if(currentLayerIdx < 0) currentLayerIdx = 0;
@@ -75,6 +76,7 @@ public void changeLayerOrder(int which, int toWhere){
     PGraphics tmp = layers.get(which);
     layers.remove(which);
     layers.add(toWhere, tmp);
+    currentLayerIdx = toWhere;
     renderLayers();
 
   }
@@ -83,7 +85,7 @@ public void changeLayerOrder(int which, int toWhere){
 
 void renderLayers(){
 
-  image(bg, 0, 0);
+  background(0, 0);
   for(int i = 0; i < layers.size(); i++){
 
     layer = layers.get(i);
@@ -98,7 +100,7 @@ void createBG(){
   bg = createGraphics(WIDTH, HEIGHT, RENDER);
   bg.beginDraw();
   bg.smooth(8);
-  bg.background(255, 0, 0);
+  bg.background(0, 0);
   bg.endDraw();
 
 }
@@ -110,18 +112,13 @@ void createBG(){
 void setup(){
 
   size(WIDTH, HEIGHT);
+  background(0, 0);
 
-  // bg = createGraphics(WIDTH, HEIGHT, RENDER);
-  // bg.beginDraw();
-  // bg.background(255, 0, 0);
-  // bg.endDraw();
-  // background(bg);
-
+  // the default layer
   layers = new ArrayList<PGraphics>();
   PGraphics layer = createGraphics(WIDTH, HEIGHT, RENDER);
   layer.beginDraw();
   layer.smooth(8);
-  // layer.background(255, 0);
   layer.background(unhex(BG_COLOR));
   layer.endDraw();
   if(layers.size()==0)
@@ -129,7 +126,6 @@ void setup(){
   else
     layers.set(0, layer);
   
-  createBG();
   renderLayers();
 
 }
@@ -196,45 +192,53 @@ void brush(layer){
 
 // Eraser
 
+void eraseCircle(cX, cY, radius){
+
+  for(int x = (int)(cX - radius); x <= (int)(cX + radius); x++){
+
+    for(int y = (int)(cY - radius); y <= (int)(cY + radius); y++){
+
+      float distance = dist(x, y, cX, cY);
+      if (distance <= radius) 
+        layer.pixels[(int)(y)*window.sketch_w+(int)(x)] = color(0, 0);
+
+    }
+
+  }
+
+}
+
 void eraser(layer){
 
   layer.loadPixels();
   if(mousePressed){
 
     int radius = window.params.size.eraser/2;
-    for(int x = (int)(mX - radius); x <= (int)(mX + radius); x++){
 
-      for(int y = (int)(mY - radius); y <= (int)(mY + radius); y++){
+    if(abs(mX - pmX) > abs(mY - pmY)){
 
-        float distance = dist(x, y, mX, mY);
-        if (distance <= radius) 
-          layer.pixels[(int)(y)*window.sketch_w+(int)(x)] = color(0, 0);
+      for(int cX = min(mX, pmX); cX <= max(mX, pmX); cX++){
 
+        int cY = (cX-pmX)*(mY - pmY)/(mX - pmX) + pmY;
+        eraseCircle(cX, cY, radius);
+        
       }
 
     }
+    else{
+
+      for(int cY = min(mY, pmY); cY <= max(mY, pmY); cY++){
+
+        int cX = (cY-pmY)*(mX - pmX)/(mY - pmY) + pmX;
+        eraseCircle(cX, cY, radius);
+        
+      }
+
+    }
+    
 
   }
   layer.updatePixels();
-
-  // layer.stroke(255);
-  // layer.strokeWeight(window.params.size.eraser);
-  // if(mousePressed){
-
-  //   if(!preMouseX) preMouseX = mX;
-  //   if(!preMouseY) preMouseY = mY;
-
-  //   layer.line(preMouseX, preMouseY, mX, mY);
-  //   preMouseX = mX;
-  //   preMouseY = mY;
-
-  // }
-  // else{
-
-  //   preMouseX = null;
-  //   preMouseY = null;
-
-  // }
 
 }
 

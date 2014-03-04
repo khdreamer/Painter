@@ -1,4 +1,5 @@
 var layer_count = 1;
+var layers_created = 1;
 
 var bind_layer_event = function($layer){
 
@@ -17,7 +18,7 @@ var bind_layer_event = function($layer){
 var create_layer = function(){
 
   // add layer to layer panel
-  var $layer = $("<li class=\"layer\">layer" + layer_count + "</li>");
+  var $layer = $("<li class=\"layer\">layer" + layers_created + "</li>");
   $layer.insertBefore(".current");
   $(".current").removeClass("current");
   $layer.addClass("current");
@@ -28,6 +29,7 @@ var create_layer = function(){
   sketch.createLayer(idx);
 
   layer_count++;
+  layers_created++;
 
 }
 

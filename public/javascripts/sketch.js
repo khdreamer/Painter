@@ -16,11 +16,13 @@ $(function(){
   });
   $("div#sketch_wrapper").width($(window).width() - 241).height($(window).height());
 
-  $("#file_setup input[type=button]").click(function(){
+  $("#file_setup #ok input[type=button]").click(function(){
 
     sketch_w = $("#file_setup input[name=width]").val();
     sketch_h = $("#file_setup input[name=height]").val();
     sketch_name = $("#file_setup input[name=name]").val();
+
+
 
     // position
     var l = ($("#sketch_wrapper").width() - sketch_w)/2;
@@ -28,7 +30,9 @@ $(function(){
     $("canvas").css({
 
       "left": l,
-      "top": t
+      "top": t,
+      "background": "url(images/transp_bg.png)",
+      "backgroundColor": "#fff"
 
     });
 
