@@ -21,7 +21,10 @@
   
 使用方式  
 
->先安裝用到的 packages 
+>先安裝用到的 packages  
+
     npm install 
+
 >開起來 
+
     node app.js  
