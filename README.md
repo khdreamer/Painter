@@ -1,5 +1,8 @@
+Painter
+=======
+
 架構
-===
+---
 
 1.  backend  
 連到 node.js (使用 express)，將所需的前端檔案回傳給瀏覽器。需要 server 的原因是需要讀取 processing.js。  
@@ -10,7 +13,7 @@ html 裡面的 canvas 包著 processing.js，大部分繪圖 function 都是 pro
 
 
 實做的功能
-==========
+--------
 
 1.  最開始可以選擇畫布大小 
 2.  鉛筆：可以調整筆刷大小 
@@ -25,7 +28,7 @@ html 裡面的 canvas 包著 processing.js，大部分繪圖 function 都是 pro
 
   
 使用方式
-=========
+-------
 
 先安裝用到的 packages  
 
